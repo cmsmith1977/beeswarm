@@ -12,7 +12,7 @@ class Sip(HandlerBase, DatagramServer):
         super(Sip, self).__init__(sessions, options, workdir)
         self.protocol_type = ProtocolType.UDP
         self.socket = None
-        sessiondict = { }
+        self.sessiondict = { }
     
     def handle_session(self, data, address):
         
@@ -21,19 +21,19 @@ class Sip(HandlerBase, DatagramServer):
         
         ## Look in our map (ok python, dictionary) for session with our key
         #
-        if sessionkey in sessiondict.keys():
+        if sessionkey in self.sessiondict.keys():
             
             ## We already know this guy
             #
-            session = sessiondict[sessionkey]
+            session = self.sessiondict[sessionkey]
         
         else:
             
             ## noob, create a session for him/her
             #
             session = self.create_session(address)
-            sessiondict[sessionkey] = session
-            session.activity()
+            self.sessiondict[sessionkey] = session
+            session.activity()  
         
         ## Log to our session this SIP message
         #
